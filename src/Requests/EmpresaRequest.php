@@ -7,7 +7,7 @@ class EmpresaRequest
     public function create($data): array
     {
         $fieldsRequired = [
-            'razao_social', 
+            'nome', 
             'nome_fantasia',
             'inscricao_estadual',
             'cnpj',
@@ -19,10 +19,7 @@ class EmpresaRequest
             'bairro',
             'cep',
             'municipio',
-            'uf',
-            'habilita_nfe',
-            'certificado_base64',
-            'senha_certificado'
+            'uf'
         ];
 
         $validate = [];
