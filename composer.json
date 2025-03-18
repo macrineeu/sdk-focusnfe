@@ -1,10 +1,10 @@
 {
-    "name": "macrineu/sdk-focusnfe",
+    "name": "macrineeu/sdk-focusnfe",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Macrineu\\SdkFocusnfe\\": "src/"
+            "Macrineeu\\SdkFocusnfe\\": "src/"
         }
     },
     "authors": [
