@@ -2,8 +2,10 @@
 
 namespace Macrineeu\SdkFocusnfe\Traits;
 
+use GuzzleHttp\Psr7;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use Macrineeu\SdkFocusnfe\Requests\EmpresaRequest;
 
 class Empresas
@@ -17,6 +19,27 @@ class Empresas
         $this->sandbox = $sandbox;
         $this->token = $token;
         $this->request = new Client();
+    }
+
+    public function listAll(): array
+    {
+        try {
+            $response = $this->request->get( "https://api.focusnfe.com.br/v2/empresas", [
+                "headers" => [
+                    "Authorization" => "Basic " . base64_encode("$this->token:")
+                ]
+            ]);
+
+            return [
+                'status_code' => $response->getStatusCode(),
+                'data' => json_decode($response->getBody())
+            ];
+        } catch (RequestException $th) {
+            return [
+                'status_code' => $th->getCode(),
+                'exception' => (string) $th->getResponse()->getBody() 
+            ];
+        }
     }
 
     public function create(array $data): array
@@ -140,10 +163,32 @@ class Empresas
                 'status_code' => $response->getStatusCode(),
                 'data' => json_decode($response->getBody())
             ];
-        } catch (ClientException $th) {
+        } catch (RequestException $th) {
             return [
                 'status_code' => $th->getCode(),
-                'message' => $th->getMessage()
+                'exception' => json_decode((string) $th->getResponse()->getBody()) 
+            ];
+        }
+    }
+
+    public function update(int $id, array $data): array
+    {
+        try {
+            $response = $this->request->put( "https://api.focusnfe.com.br/v2/empresas/{$id}" . ($this->sandbox ? '?dry_run=1' : ''), [
+                "headers" => [
+                    "Authorization" => "Basic " . base64_encode("$this->token:")
+                ],
+                "json" => $data,
+            ]);
+
+            return [
+                'status_code' => $response->getStatusCode(),
+                'data' => json_decode($response->getBody())
+            ];
+        } catch (RequestException $th) {
+            return [
+                'status_code' => $th->getCode(),
+                'exception' => json_decode((string) $th->getResponse()->getBody()) 
             ];
         }
     }
