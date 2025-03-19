@@ -42,6 +42,27 @@ class Empresas
         }
     }
 
+    public function find(int $id): array
+    {
+        try {
+            $response = $this->request->get( "https://api.focusnfe.com.br/v2/empresas/{$id}", [
+                "headers" => [
+                    "Authorization" => "Basic " . base64_encode("$this->token:")
+                ]
+            ]);
+
+            return [
+                'status_code' => $response->getStatusCode(),
+                'data' => json_decode($response->getBody())
+            ];
+        } catch (RequestException $th) {
+            return [
+                'status_code' => $th->getCode(),
+                'exception' => json_decode((string) $th->getResponse()->getBody()) 
+            ];
+        }
+    }
+
     public function create(array $data): array
     {
         $requiredFields = (new EmpresaRequest())->create($data);
