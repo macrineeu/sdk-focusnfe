@@ -212,6 +212,31 @@ class Empresas
         }
     }
 
+    public function uploadCertificado(int $id, string $base64, string $senha): array
+    {
+        try {
+            $response = $this->request->put( "https://api.focusnfe.com.br/v2/empresas/{$id}" . ($this->sandbox ? '?dry_run=1' : ''), [
+                "headers" => [
+                    "Authorization" => "Basic " . base64_encode("$this->token:")
+                ],
+                "json" => [
+                    'arquivo_certificado_base64' => $base64,
+                    'senha_certificado' => $senha,
+                ],
+            ]);
+
+            return [
+                'status_code' => $response->getStatusCode(),
+                'data' => json_decode($response->getBody())
+            ];
+        } catch (RequestException $th) {
+            return [
+                'status_code' => $th->getCode(),
+                'exception' => json_decode((string) $th->getResponse()->getBody()) 
+            ];
+        }
+    }
+
     public function delete(int $id): array
     {
         try {
