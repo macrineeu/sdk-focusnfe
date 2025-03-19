@@ -2,9 +2,7 @@
 
 namespace Macrineeu\SdkFocusnfe\Traits;
 
-use GuzzleHttp\Psr7;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use Macrineeu\SdkFocusnfe\Requests\EmpresaRequest;
 
