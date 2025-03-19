@@ -42,18 +42,4 @@ class EmpresaRequest
 
         return $validate;
     }
-
-    private function requiredInputs(string $key, array $data): array
-    {
-        if (!isset($data[$key]) || empty($data[$key])) {
-            return [
-                'message' => "A chave {$key} é obrigatória",
-                'status' => 401
-            ];
-        }
-
-        return [
-            'status' => 200
-        ];
-    }
 }
