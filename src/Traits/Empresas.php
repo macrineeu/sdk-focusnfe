@@ -2,14 +2,21 @@
 
 namespace Macrineeu\SdkFocusnfe\Traits;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Macrineeu\SdkFocusnfe\Requests\EmpresaRequest;
 
 class Empresas
 {
-    protected $isProduction;
-    public function __construct(bool $isProduction = false)
+    protected $sandbox;
+    protected $token;
+    protected $request;
+
+    public function __construct(string $token, bool $sandbox)
     {
-        $this->isProduction = $isProduction;
+        $this->sandbox = $sandbox;
+        $this->token = $token;
+        $this->request = new Client();
     }
 
     public function create(array $data): array
@@ -56,6 +63,23 @@ class Empresas
             'serie_nfce_homologacao' => $data['serie_nfce_homologacao'] ?? null,
         ];
 
-        return ['production' => (bool) $this->isProduction, 'data' => $body];
+        try {
+            $response = $this->request->post( "https://api.focusnfe.com.br/v2/empresas?dry_run=1", [
+                "headers" => [
+                    "Authorization" => "Basic " . base64_encode("$this->token:")
+                ],
+                "json" => $body,
+            ]);
+
+            return [
+                'status_code' => $response->getStatusCode(),
+                'data' => json_decode($response->getBody())
+            ];
+        } catch (ClientException $th) {
+            return [
+                'status_code' => $th->getCode(),
+                'message' => $th->getMessage()
+            ];
+        }
     }
 }
