@@ -2,6 +2,8 @@
 
 namespace Macrineeu\SdkFocusnfe\Requests;
 
+use Exception;
+
 class EmpresaRequest
 {
     public function create($data): array
@@ -27,16 +29,12 @@ class EmpresaRequest
         foreach ($fieldsRequired as $field) {
             if (array_key_exists($field, $data)) {
                 if (empty($data[$field])) {
-                    $validate[] = [
-                        'message' => "A campo {$field} não pode ser vazio ou nulo!"
-                    ];
+                    throw new Exception( "A campo {$field} não pode ser vazio ou nulo!", 1);
                 }
             }
 
             if (!array_key_exists($field, $data)) {
-                $validate[] = [
-                    'message' => "A campo {$field} é obrigatório!"
-                ];
+                throw new Exception( "A campo {$field} é obrigatório!", 1);
             }
         }
 
