@@ -8,4 +8,9 @@ trait ServiceTrait
     {
         return new Empresas($token, $sandbox);
     }
+
+    public function nfe(bool $sandbox = false, string $token)
+    {
+        return new Nfe($token, $sandbox);
+    }
 }
