@@ -71,5 +71,11 @@ class Nfe {
         return $this;
     }
 
-    
+    public function emitente(array $data): static
+    {
+        (new NfeRequest())->emitente($data);
+
+        $this->emitente = $data;
+        return $this;
+    }
 }
