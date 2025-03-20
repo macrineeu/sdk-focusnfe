@@ -15,7 +15,9 @@ class NfeRequest
             'local_destino',
             'finalidade_emissao',
             'consumidor_final',
-            'presenca_comprador'
+            'presenca_comprador',
+            'valor_total',
+            'modalidade_frete'
         ];
 
         $this->inputRequired($fieldsRequired, $data);
@@ -64,10 +66,38 @@ class NfeRequest
             'bairro_destinatario',
             'municipio_destinatario',
             'uf_destinatario',
-            'indicador_inscricao_estadual_destinatario'
         ];
 
         $this->inputRequired($fieldsRequired, $data);
+
+        return true;
+    }
+
+    public function itens(array $data)
+    {
+        $fieldsRequired = [
+            'numero_item',
+            'codigo_produto',
+            'descricao',
+            'cfop',
+            'quantidade_comercial',
+            'quantidade_tributavel',
+            'valor_unitario_comercial',
+            'valor_unitario_tributavel',
+            'unidade_comercial',
+            'unidade_tributavel',
+            'valor_bruto',
+            'codigo_ncm',
+            'inclui_no_total',
+            'icms_origem',
+            'icms_situacao_tributaria',
+            'pis_situacao_tributaria',
+            'cofins_situacao_tributaria',
+        ];
+
+        foreach ($data as $item) {
+            $this->inputRequired($fieldsRequired, $item);
+        }
 
         return true;
     }
@@ -76,7 +106,7 @@ class NfeRequest
     {
         foreach ($fieldsRequired as $field) {
             if (array_key_exists($field, $data)) {
-                if (empty($data[$field])) {
+                if (empty($data[$field]) && $data[$field] != 0) {
                     throw new Exception( "A campo {$field} não pode ser vazio ou nulo!", 1);
                 }
             }
