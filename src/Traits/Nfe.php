@@ -175,4 +175,25 @@ class Nfe {
             ];
         }
     }
+
+    public function consulta(string $referencia): array
+    {
+        try {
+            $response = $this->request->get($this->url . "/v2/nfe/{$referencia}", [
+                "headers" => [
+                    "Authorization" => "Basic " . base64_encode("$this->token:")
+                ]
+            ]);
+
+            return [
+                'status_code' => $response->getStatusCode(),
+                'data' => json_decode($response->getBody())
+            ];
+        } catch (RequestException $th) {
+            return [
+                'status_code' => $th->getCode(),
+                'exception' => json_decode((string) $th->getResponse()->getBody()) 
+            ];
+        }
+    }
 }
