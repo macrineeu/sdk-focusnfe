@@ -18,21 +18,9 @@ class NfeRequest
             'presenca_comprador'
         ];
 
-        $validate = [];
+        $this->inputRequired($fieldsRequired, $data);
 
-        foreach ($fieldsRequired as $field) {
-            if (array_key_exists($field, $data)) {
-                if (empty($data[$field])) {
-                    throw new Exception( "A campo {$field} não pode ser vazio ou nulo!", 1);
-                }
-            }
-
-            if (!array_key_exists($field, $data)) {
-                throw new Exception( "A campo {$field} é obrigatório!", 1);
-            }
-        }
-
-        return $validate;
+        return true;
     }
 
     public function emitente(array $data)
@@ -54,6 +42,13 @@ class NfeRequest
             'regime_tributario_emitente'
         ];
 
+        $this->inputRequired($fieldsRequired, $data);
+
+        return true;
+    }
+
+    private function inputRequired(array $fieldsRequired, array $data)
+    {
         foreach ($fieldsRequired as $field) {
             if (array_key_exists($field, $data)) {
                 if (empty($data[$field])) {
