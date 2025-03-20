@@ -47,6 +47,31 @@ class NfeRequest
         return true;
     }
 
+    public function destinatario(array $data)
+    {
+        $cnpj = $data['cnpj_destinatario'];
+        $cpf = $data['cpf_destinatario'];
+        
+        if (!$cnpj && !$cpf) {
+            throw new Exception( "É obrigatório informar CNPJ/CPF do destinatário!", 1);
+        }
+
+        $fieldsRequired = [
+            'nome_destinatario',
+            'inscricao_estadual_destinatario',
+            'logradouro_destinatario',
+            'numero_destinatario',
+            'bairro_destinatario',
+            'municipio_destinatario',
+            'uf_destinatario',
+            'indicador_inscricao_estadual_destinatario'
+        ];
+
+        $this->inputRequired($fieldsRequired, $data);
+
+        return true;
+    }
+
     private function inputRequired(array $fieldsRequired, array $data)
     {
         foreach ($fieldsRequired as $field) {

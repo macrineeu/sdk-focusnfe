@@ -78,4 +78,14 @@ class Nfe {
         $this->emitente = $data;
         return $this;
     }
+
+    public function destinatario(array $data)
+    {
+        (new NfeRequest())->destinatario($data);
+
+        $this->destinatario = $data;
+        return $this;
+    }
+
+    
 }
