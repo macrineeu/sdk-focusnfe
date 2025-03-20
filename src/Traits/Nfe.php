@@ -56,6 +56,13 @@ class Nfe {
      */
     protected $itens;
 
+
+    /**
+     * Chave NFe de Devolução
+     * @var array $devolucao
+     */
+    protected $devolucao;
+
     /**
      * URL de requisição
      * @var string $url
@@ -132,6 +139,17 @@ class Nfe {
         return $this;
     }
 
+    public function nfDevolucao(int $chave): static
+    {
+        if (strlen($chave) != 44) {
+            throw new Exception("A chave de devolução está fora do padrão de 44 caractéres!");
+        }
+
+        $this->devolucao = $chave;
+        return $this;
+    }
+
+
     public function enviar(): array
     {
         if (!$this->referencia) {
@@ -155,6 +173,16 @@ class Nfe {
         }
 
         $body = array_merge($this->infoEmissao, $this->emitente, $this->destinatario, ['itens' => $this->itens]);
+
+        if ($this->devolucao) {
+            $body = array_merge($body, [
+                'notas_referenciadas' => [
+                    [
+                        'chave_nfe' => $this->devolucao
+                    ]
+                ]
+            ]);
+        }
 
         try {
             $response = $this->request->post($this->url . "/v2/nfe?ref={$this->referencia}", [
